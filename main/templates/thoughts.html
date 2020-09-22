@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thought Board</title>
+</head>
+<body>
+    <h1>Hi {{user.first_name}} {{user.last_name}}!</h1>
+    <br>
+    <a href="/logout" style="padding-left: 1000px;">Logout</a>
+
+    <form action='/createnewthought' method="POST">
+        <div style="display: flex;">
+        {% csrf_token %}
+    
+        {% for err in messages %}
+        <p style="color: red;">{{ err }}</p>
+        {% endfor %}
+        <input type='text' name='thoughtName' placeholder="Post a Great Thought Here!"><br>
+    
+        <button style="background-color: blue; color: white; border: 2px solid black; box-shadow: 3px; margin-left: 20px;">Add Thought!</button><br>
+    </div>
+<p>__________________________________________________________________________________________________________________________________</p>
+    
+
+{% for thought in all_thoughts %}
+<div style="display: block;">
+<tr>
+    <td style="display: inline-block;">{{thought.creator.first_name}} Says:</td>
+    <td style="display: inline-block;">
+        <p style="border: 3px solid black; display: inline-block;padding:30px 80px 30px 80px;">{{thought.thoughtName}}</p><br>
+        <div style="display: inline-flex;">
+        <a style="padding-left: 80px; display: inline-block" href="/thoughts/{{thought.id}}">Details</a><br>
+        <p style="padding-right: 50px; padding-left: 30px; margin-top: 0px;">{{thought.users_who_like.count}} people like this</p>
+        </div>
+    </td>
+    <td> {% if user == thought.creator %}
+        <button style="background-color: red; color: white; border: 2px solid black; box-shadow: 4px;"><a href="/thought/{{thought.id}}/remove">Delete</a></button>
+        {% endif %}</td>
+</tr>
+</div>
+{% endfor %}
+
+</body>
+</html>
